@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/Preetham-reddy1999/node-docker-jenkins-pipeline'
+                git 'https://github.com/Preetham-reddy1999/node-docker-jenkins-pipeline', branch: 'main'
             }
         }
 
