@@ -44,17 +44,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            mail to: 'preethamreddykarrem@gmail.com',
-                 subject: "✅ Build #${BUILD_NUMBER} Succeeded",
-                 body: "CI/CD pipeline completed successfully."
-        }
-        failure {
-            mail to: 'preethamreddykarrem@gmail.com',
-                 subject: "❌ Build #${BUILD_NUMBER} Failed",
-                 body: "CI/CD pipeline failed. Please check Jenkins logs."
-        }
-    }
 }
