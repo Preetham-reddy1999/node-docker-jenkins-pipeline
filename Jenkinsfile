@@ -7,7 +7,7 @@ pipeline {
         SSH_CREDENTIALS_ID = 'ec2-ssh'              // Your SSH key credentials ID
         DEPLOY_USER = 'ubuntu'
         DEPLOY_HOST = '13.215.45.205'
-        DEPLOY_PATH = '/home/ec2-user/'
+        DEPLOY_PATH = '/home/ubuntu/'
     }
 
     stages {
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_CREDENTIALS_ID]) {
                     // Replace 'your-app' with actual artifact or folder to deploy
-                    sh "scp -o StrictHostKeyChecking=no . ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
+                    sh "scp -o StrictHostKeyChecking=no * ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
                 }
             }
         }
