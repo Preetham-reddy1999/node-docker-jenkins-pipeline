@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'preethamreddy1999/nodejs-app'
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'  // Docker Hub creds ID
         SSH_CREDENTIALS_ID = 'ec2-ssh'              // Your SSH key credentials ID
-        DEPLOY_USER = 'ec2-user'
+        DEPLOY_USER = 'ubuntu'
         DEPLOY_HOST = '13.215.45.205'
         DEPLOY_PATH = '/home/ec2-user/'
     }
