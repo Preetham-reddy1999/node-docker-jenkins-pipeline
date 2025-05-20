@@ -3,11 +3,14 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'preethamreddy1999/nodejs-app'
-        DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-creds'  // Docker Hub creds ID
+        SSH_CREDENTIALS_ID = 'ec2-ssh'              // Your SSH key credentials ID
+        DEPLOY_USER = 'ec2-user'
+        DEPLOY_HOST = '13.215.45.205'
+        DEPLOY_PATH = '/home/ec2-user/'
     }
 
     stages {
-
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
@@ -30,24 +33,27 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: env.DOCKER_CREDENTIALS_ID, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh "docker push preethamreddy1999/nodejs-app:latest"
+                    sh "docker push $DOCKER_IMAGE:latest"
                 }
             }
         }
 
         stage('Deploy via SCP') {
             steps {
-                sshagent(['ec2-ssh']) {
-                    sh 'scp your-app user@host:/path/'
+                sshagent([env.SSH_CREDENTIALS_ID]) {
+                    // Replace 'your-app' with actual artifact or folder to deploy
+                    sh "scp -o StrictHostKeyChecking=no your-app ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
                 }
             }
         }
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ec2-ssh']) {
-                    sh 'scp docker-compose.yml ec2-user@13.215.45.205:/home/ec2-user/'
-                    sh "ssh ec2-user@13.215.45.205 'docker-compose pull && docker-compose down && docker-compose up -d'"
+                sshagent([env.SSH_CREDENTIALS_ID]) {
+                    // Copy docker-compose.yml
+                    sh "scp -o StrictHostKeyChecking=no docker-compose.yml ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
+                    // Run docker-compose commands remotely
+                    sh "ssh -o StrictHostKeyChecking=no ${env.DEPLOY_USER}@${env.DEPLOY_HOST} 'docker-compose pull && docker-compose down && docker-compose up -d'"
                 }
             }
         }
