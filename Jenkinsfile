@@ -11,14 +11,6 @@ pipeline {
     }
 
     stages {
-        stage('Debug') {
-          steps {
-            sshagent([env.SSH_CREDENTIALS_ID]) {
-            sh 'ls -l /var/lib/jenkins/workspace/*@tmp/private_key_*.key || echo "No private key found"'
-            sh 'sleep 300'
-    }
-  }
-}
 
         stage('Install Dependencies') {
             steps {
