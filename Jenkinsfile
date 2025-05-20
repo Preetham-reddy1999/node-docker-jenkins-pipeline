@@ -42,7 +42,7 @@ pipeline {
             steps {
                 sshagent([env.SSH_CREDENTIALS_ID]) {
                     // Replace 'your-app' with actual artifact or folder to deploy
-                    sh "scp -o StrictHostKeyChecking=no your-app ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
+                    sh "scp -o StrictHostKeyChecking=no . ${env.DEPLOY_USER}@${env.DEPLOY_HOST}:${env.DEPLOY_PATH}"
                 }
             }
         }
