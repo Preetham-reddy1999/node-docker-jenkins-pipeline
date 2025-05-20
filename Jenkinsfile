@@ -11,6 +11,14 @@ pipeline {
     }
 
     stages {
+        stage('Debug') {
+            steps {
+                sshagent([env.SSH_CREDENTIALS_ID]) {
+                    sh 'echo "Paused. Check the key path now"; sleep 300'
+                }
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
